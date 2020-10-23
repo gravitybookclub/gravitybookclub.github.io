@@ -325,7 +325,8 @@
                 tipped = true;
             } 
             else {
-                post = `📚 :: #books : ${title} - ${author} : ${link}`
+                post = `📚 :: #books : ${title} - ${author} : ${link}`;
+                post += ' $gbc';
                 loadingDlg();
             }
             await build(post,'twetch/post@0.0.1', tipped);
