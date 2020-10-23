@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
    <head>
-    <title>ZeroSchool</title>
+    <title>Gravity Book Club</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="zeroschool"/>
+    <meta property="og:title" content="gravitybookclub"/>
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://zeroschool.org">
+    <meta property="og:url" content="https://gravitybook.club">
     <!--<meta property="og:image:url" content="https://retrotwetch.com/assets/icons/icon-512x512.png">-->
-    <meta property="og:description" content="Ceci n'est pas une école.">
-    <meta name="apple-mobile-web-app-title" content="ZeroSchool">
+    <meta property="og:description" content="Gravity Books"><!--Need a better description -->
+    <meta name="apple-mobile-web-app-title" content="Gravity Book Club">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet">
@@ -26,12 +26,12 @@
    <body>
     <div class="top">
         <!-- <a class="nes-logo config" href="/profile"></a> -->
-        <h4><a href="/">ZeroSchool</a></h4>
+        <h4><a href="/">Gravity Book Club</a></h4>
         <a href="/welcome"><img class="question nes-pointer" src="assets/resources/question_block_32.png"></a>
     </div>
     <div class="poster">
         <form onsubmit="return false" id="post-container">
-            <textarea type="text" id="post" class="nes-input is-dark" placeholder="What do you *really* wanna learn?"></textarea>
+            <textarea type="text" id="post" class="nes-input is-dark" placeholder="What do you *really* wanna read?"></textarea>
             <input type="submit" id="tPost" value="Post" onclick="twetchPost()">
         </form>
     </div>
@@ -42,7 +42,7 @@
     <div id="message-container" class=""></div>
     <dialog class="nes-dialog" id="dlg"></dialog>
     <script>
-        const inReplyTo = 'b3ab98273886ffa0dc2b312514e58b1dc8049a799d9eea47de60531b8eb30b17'; // Twetch ZeroSchool: I wanna learn _____
+        //const inReplyTo = 'b3ab98273886ffa0dc2b312514e58b1dc8049a799d9eea47de60531b8eb30b17'; // Twetch ZeroSchool: I wanna learn _____
         const publicVapidKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUyIn0sImlhdCI6MTU5MjQwMTgxNH0.adZ_QsfshakYBNASIjMWQw46rh__8t8_f75n5I3w2jg';
         const savePermissionToken = (token) => {
             localStorage.setItem('token', token);
@@ -52,7 +52,7 @@
                 return localStorage.getItem('token');
             }
         }
-        const imbCli = window.location.href.includes('localhost') ? 'ee9db2a1a7003d2f2f6798eb4616f2fd' : 'ce4eb6ea41a4f43044dd7e71c08e50b2';
+        const imbCli = window.location.href.includes('localhost') ? 'ee9db2a1a7003d2f2f6798eb4616f2fd' : '0a0c7f6f4038fc0699ced9f81b160a97';
         const imb = new moneyButton.IMB({
             clientIdentifier: imbCli,
             permission: getPermissionForCurrentUser(), 
