@@ -41,7 +41,20 @@
     <div class="selection"><div class="nes-select is-dark" id="qselect">
         <select required id="order"><option value="0">Most recent</option><option value="1">Likes</option><option value="2">PoW</option></select></div>
     </div>
-    <div id="current-book" class=""></div>  
+    <div id="current-book" class="nes-container is-rounded with-title is-dark twetch">
+        <p class="profile"><img class="nes-avatar is-rounded is-medium"></p>
+        <p><a class="userLink" href="" target="_blank"></a></p>
+        <span class="timeago"></span>
+        <i class="nes-icon coin is-medium nes-pointer"></i>
+        <p class="postContent urlFormat"></p>
+            <div class="item">
+                <i class="nes-icon heart is-medium is-empty"></i><var class="numLikes"></var>
+                <button type="button" class="nes-btn bridge">Go to Twetch!</button>
+                <a target="_blank" class="txid">#tx</a>
+                <i class="nes-icon star is-medium is-empty nes-pointer"></i>
+                <var class="boostValue"></var>
+            </div>
+    </div> 
     <div id="message-container" class=""></div>
     <dialog class="nes-dialog" id="dlg"></dialog>
     <script>
@@ -63,13 +76,14 @@
         var sdk = new twetchjs({ clientIdentifier: '9d27a879-ee0c-4653-8839-a4b2f6fa8023' });
         var coinSound = new Audio(); coinSound.src = '/assets/resources/coin.wav', dialog = {}, loadingLike = false;
         //var outputs = [], cryptoOperations = [], loadingPost = false, selOrder = 0, fileTwetch = 0, loadingText = "Deschooling society";
-        var outputs = [], cryptoOperations = [], loadingPost = false, selOrder = 0, loadingText = "Deschooling society";
+        var outputs = [], cryptoOperations = [], loadingPost = false, selOrder = 0, loadingText = "Harnessing gravity"; // Maybe something better?
         async function twgin() {
             if (localStorage.getItem('tokenTwetchAuth')) {
                 sdk.authenticated = true;
                 await sdk.authenticate();
                 await fetchTwetches(sdk, 0);
             } else {
+                document.getElementById("tPost").setAttribute("disabled", null);
                 dialogPolyfill.registerDialog(dialog);
                 dialog.innerHTML = `<form method="dialog"><p>You need to be logged in to post a book. <a href="/login">Log in ?</a></p></form>`;
                 dialog.showModal();
@@ -86,13 +100,19 @@
             document.getElementById("order").options[selOrder].selected = true;
         }
         document.getElementById("tPost").setAttribute("disabled", null);
-        document.getElementById("post").addEventListener("keyup", () => {checkPost()})
+        document.getElementById("link").addEventListener("keyup", () => {checkPost()})
         function checkPost(){
-            let input = document.getElementById("post").value;
-            if (input != "") {
+            let bitcoin_files_regex = new RegExp("http(s)?:\/\/(.*\.)?media\.bitcoinfiles\.org\/([A-z0-9]+)");
+            let title = document.getElementById("title").value
+            let author = document.getElementById("author").value;
+            let link = document.getElementById("post").value;
+            if (title != "" and author != "" and link != "") {
                 document.getElementById("tPost").removeAttribute("disabled");
-                if (input.length >= 256) {
+                if (bitcoin_files_regex.test(link)) {
                     document.getElementById("tPost").setAttribute("disabled", null);
+                    dialogPolyfill.registerDialog(dialog);
+                    dialog.innerHTML = `<form method="dialog"><p>Bitcoin File Link must be valid!</p></form>`;
+                    dialog.showModal();
                 }
             } else {
                 document.getElementById("tPost").setAttribute("disabled", null);
@@ -107,12 +127,7 @@
         async function build(content, action, tipped) {
             let obj, twOutput;
             if (action === 'twetch/post@0.0.1') {
-               if (tipped){
-                  obj = {bContent: content}
-               } else {
-                obj = {bContent: content,
-                      mapReply: inReplyTo}
-               }
+               obj = {bContent: content}
             } else {
                 obj = {postTransaction: content}
             }
