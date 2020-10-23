@@ -103,21 +103,25 @@ const fetchTwetches = async(sdk, selOrder, rootTx) => {
     };
         
     response = await sdk.query(`{
-          allPosts(condition: {replyPostId: "488271"}, ${orderBy}) {
-            nodes {
-              bContent
-              createdAt
-              numLikes
-              transaction
-              userId
-              youLiked
-              userByUserId {
-                icon
-                name
-              }
-            }
-          }
-        }`);
+  allPosts(filter: {bContent: {endsWith: "$gbc"}, mediaByMediaIdExists: true}, ${orderBy}) {
+    nodes {
+      bContent
+      files
+      mediaId
+      id
+      createdAt
+      numLikes
+      replyCount
+      transaction
+      userId
+      userByUserId {
+        icon
+        name
+      }
+      youLiked
+    }
+  }
+}`);
 
     posts = response.allPosts.nodes;
     let profiles = document.getElementsByClassName("nes-avatar")
