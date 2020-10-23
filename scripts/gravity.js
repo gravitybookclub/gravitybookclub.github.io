@@ -1,3 +1,9 @@
+const BITCOIN_FILES_REGEX = /http(s)?:\/\/(.*\.)?media\.bitcoinfiles\.org\/([A-z0-9]+)/;
+const BITCOIN_FILES_PREVIEW_REGEX = /http(s)?:\/\/(.*\.)?bitcoinfiles\.org\/t\/([A-z0-9_\/?=]+)/;
+const HASHTAG_CONTEXT_REGEX = /([#\$][0-9a-zA-Z(_\.\,)]{1,})/gi;
+const HASHTAG_REGEX = /([#\$][0-9a-zA-Z(_\.\,)]{1,})/gi;
+const CURRENT_BOOK_TX = "";
+
 const ascii_to_hexa = (str) => {
     var arr1 = [];
     for (var n = 0, l = str.length; n < l; n ++) 
@@ -73,10 +79,10 @@ const populateHTML = (count) => {
         <p class="postContent urlFormat"></p>
             <div class="item">
                 <i class="nes-icon heart is-medium is-empty"></i><var class="numLikes"></var>
-                <!--<button type="button" class="nes-btn share">Share</button>-->
+                <button type="button" class="nes-btn bridge">Go to Twetch!</button>
                 <a target="_blank" class="txid">#tx</a>
-                <!--<i class="nes-icon star is-medium is-empty nes-pointer"></i>-->
-                <!--<var class="boostValue"></var>-->
+                <i class="nes-icon star is-medium is-empty nes-pointer"></i>
+                <var class="boostValue"></var>
             </div>
         </div>`
     }
@@ -87,7 +93,7 @@ const compare = (a,b) => {
     else if (aBoost > bBoost) {comp = -1} 
     return comp;
 }
-const fetchTwetches = async(sdk, selOrder, rootTx) => {
+const fetchTwetches = async(sdk, selOrder) => {
     // Make sure #message-container exists
     let $container = document.getElementById("message-container");
     if ($container != null) {
@@ -103,7 +109,7 @@ const fetchTwetches = async(sdk, selOrder, rootTx) => {
     };
         
     response = await sdk.query(`{
-  allPosts(filter: {bContent: {endsWith: "$gbc"}, mediaByMediaIdExists: true}, ${orderBy}) {
+  allPosts(filter: {bContent: {endsWith: "$gbc"}}, ${orderBy}) {
     nodes {
       bContent
       files
@@ -129,18 +135,18 @@ const fetchTwetches = async(sdk, selOrder, rootTx) => {
     let contents = document.getElementsByClassName("postContent")
     let hearts = document.getElementsByClassName("heart")
     let likes = document.getElementsByClassName("numLikes");
-    //let shares = document.getElementsByClassName("share")
+    let bridges = document.getElementsByClassName("bridge")
     let txids = document.getElementsByClassName("txid");
     let coins = document.getElementsByClassName("coin");
-    //let stars = document.getElementsByClassName("nes-icon star is-medium");
-    //let boostValues = document.getElementsByClassName("boostValue");
+    let stars = document.getElementsByClassName("nes-icon star is-medium");
+    let boostValues = document.getElementsByClassName("boostValue");
     let times = document.getElementsByClassName("timeago");
     let twetches = document.getElementsByClassName("twetch");
     populateHTML(posts.length);
     const addTwetch = (post, i) => {
-        let content = post.bContent.replace('$zeroschool', '');
-        //let boostData = data.find(tx => tx.txid === post.transaction);
-        //boostValue = boostData !== undefined ? boostData.boosts : 0;
+        let content = post.bContent.replace('$gbc', '');
+        let boostData = data.find(tx => tx.txid === post.transaction);
+        boostValue = boostData !== undefined ? boostData.boosts : 0;
         /*if (profiles[i] !== undefined) {
             fetch('/user', {
                 method: 'post',
@@ -164,7 +170,7 @@ const fetchTwetches = async(sdk, selOrder, rootTx) => {
         likes[i].innerHTML = post.numLikes;
         likes[i].id = `${post.transaction}_count`;
         twetches[i].id = post.transaction;
-        //shares[i].name = post.transaction;
+        bridges[i].name = post.transaction;
         hearts[i].id = post.transaction;
         if (post.youLiked === "1") {
             hearts[i].className = 'nes-icon heart is-medium';
@@ -175,25 +181,36 @@ const fetchTwetches = async(sdk, selOrder, rootTx) => {
         }
         txids[i].href = `https://search.matterpool.io/tx/${post.transaction}`;
         coins[i].setAttribute("name", post.userId);
-        //stars[i].setAttribute("name", post.transaction)
-        /*if (boostValue > 0) {
+        stars[i].setAttribute("name", post.transaction)
+        if (boostValue > 0) {
             stars[i].className = 'nes-icon star is-medium'
-        };*/
-        //boostValues[i].innerHTML = parseInt(boostValue);
+        };
+        boostValues[i].innerHTML = parseInt(boostValue);
         coins[i].addEventListener('click', askTip);
-        //stars[i].addEventListener('click', boost);
-        //shares[i].addEventListener('click', shareTwetch);
-        //twetches[i].addEventListener('click', goToTwetch);
+        stars[i].addEventListener('click', boost);
+        bridges[i].addEventListener('click', goToTwetch);
         let d = new Date(post.createdAt);
         times[i].innerHTML = timeago(d);
     }
-        for (let i = 0; i < posts.length; i++) {
-            addTwetch(posts[i], i);
+        if (selOrder === '2') {
+            for (let i = 0; i < data.length; i++) {
+                let post = posts.find(p => p.transaction === data[i].txid);
+                if (post !== undefined) {
+                    addTwetch(post, i);
+                }
+            }
         }
+        else {
+            for (let i = 0; i < posts.length; i++) {
+                addTwetch(posts[i], i);
+            }
+        }
+    
+        
 };
 
 function goToTwetch() {
-        window.open("https://twetch.app/t/" + this.id);
+        window.open("https://twetch.app/t/" + this.name);
 }
 
 function youtube(content) {
