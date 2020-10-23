@@ -6,7 +6,7 @@
     <meta property="og:title" content="gravitybookclub"/>
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gravitybook.club">
-    <!--<meta property="og:image:url" content="https://retrotwetch.com/assets/icons/icon-512x512.png">-->
+    <!--<meta property="og:image:url" content="https://gravitybook.club/assets/resources/gravity.jpg">-->
     <meta property="og:description" content="Gravity Books"><!--Need a better description -->
     <meta name="apple-mobile-web-app-title" content="Gravity Book Club">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -17,7 +17,8 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/uyouthe/pwacss/pwacss.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap">
-    <!--<link rel="apple-touch-icon" href="/images/icons/icon-192x192.png">-->
+    <link rel="icon" type="image/png" href="/assets/resources/gravity.jpg"/> 
+    <link rel="apple-touch-icon" href="/assets/resources/gravity.jpg">
     <script src="https://cdn.jsdelivr.net/npm/@twetch/sdk@0.2.11/dist/twetch.min.js"></script>
     <script src="https://www.moneybutton.com/moneybutton.js"></script>
     <script src="https://one.relayx.io/relayone.js"></script>
@@ -27,22 +28,23 @@
     <div class="top">
         <!-- <a class="nes-logo config" href="/profile"></a> -->
         <h4><a href="/">Gravity Book Club</a></h4>
-        <a href="/welcome"><img class="question nes-pointer" src="assets/resources/question_block_32.png"></a>
+        <a href="/info"><img class="question nes-pointer" src="assets/resources/question_block_32.png"></a>
     </div>
     <div class="poster">
         <form onsubmit="return false" id="post-container">
-            <textarea type="text" id="post" class="nes-input is-dark" placeholder="What do you *really* wanna read?"></textarea>
-            <input type="submit" id="tPost" value="Post" onclick="twetchPost()">
+            <textarea type="text" id="title" class="nes-input is-dark" placeholder="[title]"></textarea>
+            <textarea type="text" id="author" class="nes-input is-dark" placeholder="[author]"></textarea>
+            <textarea type="text" id="link" class="nes-input is-dark" placeholder="[Bitcoin File Link]"></textarea>
+            <input type="submit" id="tPost" value="Add Book" onclick="twetchPost()">
         </form>
     </div>
     <div class="selection"><div class="nes-select is-dark" id="qselect">
-        <!--<select required id="order"><option value="0">Most recent</option><option value="1">Likes</option><option value="2">PoW</option><option value="3">News</option></select></div>-->
-        <select required id="order"><option value="0">Most recent</option><option value="1">Likes</option></select</div>
+        <select required id="order"><option value="0">Most recent</option><option value="1">Likes</option><option value="2">PoW</option></select></div>
     </div>
+    <div id="current-book" class=""></div>  
     <div id="message-container" class=""></div>
     <dialog class="nes-dialog" id="dlg"></dialog>
     <script>
-        //const inReplyTo = 'b3ab98273886ffa0dc2b312514e58b1dc8049a799d9eea47de60531b8eb30b17'; // Twetch ZeroSchool: I wanna learn _____
         const publicVapidKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUyIn0sImlhdCI6MTU5MjQwMTgxNH0.adZ_QsfshakYBNASIjMWQw46rh__8t8_f75n5I3w2jg';
         const savePermissionToken = (token) => {
             localStorage.setItem('token', token);
@@ -66,17 +68,18 @@
             if (localStorage.getItem('tokenTwetchAuth')) {
                 sdk.authenticated = true;
                 await sdk.authenticate();
-                await fetchTwetches(sdk, 0, inReplyTo);
-                //await fetchTwetches(sdk, localStorage.getItem('orderBy') !== undefined ? localStorage.getItem('orderBy') : 0);
+                await fetchTwetches(sdk, 0);
             } else {
-                window.location.href = "/welcome";
+                dialogPolyfill.registerDialog(dialog);
+                dialog.innerHTML = `<form method="dialog"><p>You need to be logged in to post a book. <a href="/login">Log in ?</a></p></form>`;
+                dialog.showModal();
             }
         }
         twgin();
         document.getElementById("order").onchange = () => {
             selOrder = document.getElementById("order").value;
             localStorage.setItem('orderBy', selOrder);
-            fetchTwetches(sdk, selOrder, inReplyTo);
+            fetchTwetches(sdk, selOrder);
         }
         if (localStorage.getItem('orderBy')) {
             selOrder = localStorage.getItem('orderBy');
@@ -123,6 +126,7 @@
             outputs = [twOutput].concat(payees);
             if (action === 'twetch/like@0.0.1'){
                 outputs[2].to = '16bKbvsXc279ZTgvjgTQ29JezjQ3sRVA8N';
+                // add contributors pkey here
                 let penny = await getPenny();
                 outputs[2].amount += penny;
                 if (outputs.length < 4) {
@@ -133,7 +137,9 @@
                 }
             } else if (action === 'twetch/post@0.0.1'){
                 outputs[2].to = '16bKbvsXc279ZTgvjgTQ29JezjQ3sRVA8N';
-                outputs[2].amount += 0.00001000
+                // add contributors pkey here
+                let penny = await getPenny();
+                outputs[2].amount += (penny * 218);
             }
             cryptoOperations = [
                 {name: 'myAddress', method: 'address', key: 'identity'},
@@ -272,12 +278,16 @@
             window.scrollTo(0,0)
         }
         async function twetchPost(text) {
-            let post = document.getElementById("post").value, tipped = false;
+            let title = document.getElementById("title").value,
+                author = document.getElementById("author").value,
+                link = document.getElementById("link").value,
+                tipped = false;
             if (text) {
                 post = text;
                 tipped = true;
             } 
             else {
+                post = `📚 :: #books : ${title} - ${author} : ${link}`
                 loadingDlg();
             }
             await build(post,'twetch/post@0.0.1', tipped);
