@@ -38,9 +38,6 @@
             <input type="submit" id="tPost" value="Add Book" onclick="twetchPost()">
         </form>
     </div>
-    <div class="selection"><div class="nes-select is-dark" id="qselect">
-        <select required id="order"><option value="0">Most recent</option><option value="1">Likes</option><option value="2">PoW</option></select></div>
-    </div>
     <div id="current-book" class="nes-container is-rounded with-title is-dark twetch">
         <p class="profile"><img class="nes-avatar is-rounded is-medium"></p>
         <p><a class="userLink" href="" target="_blank"></a></p>
@@ -55,6 +52,9 @@
                 <var class="boostValue"></var>
             </div>
     </div> 
+    <div class="selection"><div class="nes-select is-dark" id="qselect">
+        <select required id="order"><option value="0">Most recent</option><option value="1">Likes</option><option value="2">PoW</option></select></div>
+    </div>  
     <div id="message-container" class=""></div>
     <dialog class="nes-dialog" id="dlg"></dialog>
     <script>
