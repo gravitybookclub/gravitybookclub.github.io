@@ -30,14 +30,17 @@
         <h4><a href="/">Gravity Book Club</a></h4>
         <a href="/info"><img class="question nes-pointer" src="assets/resources/question_block_32.png"></a>
     </div>
-    <!--<div class="poster">
+    <div id="addDlg" class="nes-dialog poster">
         <form onsubmit="return false" id="post-container">
+            <label for="title" id="titleLabel" style="color:#fff;"></label>
             <textarea type="text" id="title" class="nes-input is-dark" placeholder="[title]"></textarea>
+            <label for="author" id="authorLabel" style="color:#fff;"></label>
             <textarea type="text" id="author" class="nes-input is-dark" placeholder="[author]"></textarea>
+            <label for="link" id="linkLabel" style="color:#fff;"></label>
             <textarea type="text" id="link" class="nes-input is-dark" placeholder="[Bitcoin File Link]"></textarea>
             <input type="submit" id="tPost" value="Add Book" onclick="twetchPost()">
         </form>
-    </div>-->
+    </div>
     <!--<div id="current-book" class="nes-container is-rounded with-title is-dark twetch">
         <p class="profile"><img class="nes-avatar is-rounded is-medium"></p>
         <p><a class="userLink" href="" target="_blank"></a></p>
@@ -95,13 +98,17 @@
         }
         twgin();
         document.getElementById('bookBtn').onclick = () => {
+                dialog = document.getElementById("addDlg"=;
+                document.getElementById("titleLabel").innerHTML = `Title`;
+                document.getElementById("authorLabel").innerHTML = `Author`;
+                document.getElementById("linkLabel").innerHTML = `Bitcoin File Link`;
                 dialogPolyfill.registerDialog(dialog);
-                dialog.innerHTML = `<form onsubmit="return false" id="post-container">
+                /*dialog.innerHTML = `<form onsubmit="return false" id="post-container">
             <textarea type="text" id="title" class="nes-input is-dark" placeholder="[title]"></textarea>
             <textarea type="text" id="author" class="nes-input is-dark" placeholder="[author]"></textarea>
             <textarea type="text" id="link" class="nes-input is-dark" placeholder="[Bitcoin File Link]"></textarea>
             <input type="submit" id="tPost" value="Add Book" onclick="twetchPost()">
-        </form>`;
+        </form>`;*/
                 dialog.showModal();
             }
         document.getElementById("order").onchange = () => {
