@@ -127,7 +127,7 @@
             let title = document.getElementById("title").value
             let author = document.getElementById("author").value;
             let link = document.getElementById("post").value;
-            if (title != "" and author != "" and link != "") {
+            if (title != "" && author != "" && link != "") {
                 document.getElementById("tPost").removeAttribute("disabled");
                 if (bitcoin_files_regex.test(link)) {
                     document.getElementById("tPost").setAttribute("disabled", null);
