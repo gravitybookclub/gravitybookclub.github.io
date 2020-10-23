@@ -91,7 +91,7 @@
                 await fetchTwetches(sdk, 0);
             } else {
                 document.getElementById("tPost").setAttribute("disabled", null);
-                dialog = document.getElementById('dlg');
+                let dialog = document.getElementById('dlg');
                 dialogPolyfill.registerDialog(dialog);
                 dialog.innerHTML = `<form method="dialog"><p>You need to be logged in to post a book. <a href="/login">Log in ?</a></p></form>`;
                 dialog.showModal();
@@ -99,7 +99,7 @@
         }
         twgin();
         document.getElementById('bookBtn').onclick = () => {
-                dialog = document.getElementById("addDlg");
+                let dialog = document.getElementById("addDlg");
                 document.getElementById("titleLabel").innerHTML = `Title`;
                 document.getElementById("authorLabel").innerHTML = `Author`;
                 document.getElementById("linkLabel").innerHTML = `Bitcoin File Link`;
@@ -132,6 +132,7 @@
                 document.getElementById("tPost").removeAttribute("disabled");
                 if (bitcoin_files_regex.test(link)) {
                     document.getElementById("tPost").setAttribute("disabled", null);
+                    let dialog = document.getElementById('dlg');
                     dialogPolyfill.registerDialog(dialog);
                     dialog.innerHTML = `<form method="dialog"><p>Bitcoin File Link must be valid!</p></form>`;
                     dialog.showModal();
@@ -246,12 +247,12 @@
         }
        
         function loadingDlg() {
-            dialog = document.getElementById('dlg');
+            let dialog = document.getElementById('dlg');
             if (dialog == null){
                dialog = document.createElement("dialog");
                dialog.setAttribute("id", "dlg");
                dialog.setAttribute("class", "nes-dialog");
-               dialog.innerHTML = `<form method="dialog" class="loading"><p id="loading">Deschooling society</p><menu class="dialog-menu"></menu></form>`;
+               dialog.innerHTML = `<form method="dialog" class="loading"><p id="loading">Summoning Gravity</p><menu class="dialog-menu"></menu></form>`;
                document.body.appendChild(dialog);
             }
             dialogPolyfill.registerDialog(dialog);
@@ -260,7 +261,7 @@
        
         function askTip() {
             let uNum = this.getAttribute("name");
-            dialog = document.getElementById('tipDlg');
+            let dialog = document.getElementById('tipDlg');
             if (dialog == null){
                dialog = document.createElement("dialog");
                dialog.setAttribute("id", "tipDlg");
@@ -332,7 +333,7 @@
             document.getElementById("post").value = "";
         }
         function showPopup(text, confirm, cancel, onClick, lock){
-            dialog = document.getElementById('dlg');
+            let dialog = document.getElementById('dlg');
             dialogPolyfill.registerDialog(dialog);
             if (lock) {
                 dialog.innerHTML = `<form method="dialog"><p>${text}</p><menu class="dialog-menu"></menu></form>`;
