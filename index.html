@@ -121,8 +121,8 @@
             selOrder = localStorage.getItem('orderBy');
             document.getElementById("order").options[selOrder].selected = true;
         }
-        document.getElementById("tPost").setAttribute("disabled", null);
-        document.getElementById("link").addEventListener("keyup", () => {checkPost()})
+        //document.getElementById("tPost").setAttribute("disabled", null);
+        document.getElementById("tPost").addEventListener("keyup", () => {checkPost()})
         function checkPost(){
             let bitcoin_files_regex = new RegExp("http(s)?:\/\/(.*\.)?media\.bitcoinfiles\.org\/([A-z0-9]+)");
             let title = document.getElementById("title").value
