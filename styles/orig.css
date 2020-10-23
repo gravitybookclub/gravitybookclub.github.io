@@ -36,6 +36,7 @@ p {
     transform: translate(-50%, -50%);
     max-width: 95%;
     max-height: 100%;
+    padding: 1.5rem 2rem 2rem 1.5rem;	
 }
 .selection {
     padding-top: 15px;
@@ -185,7 +186,7 @@ select#order {
 #tPost {
     position: absolute;
     right: 10px;
-    top: 92px;
+    top: 242px;
     margin-top: 2px;
 }
 #postTitle {
