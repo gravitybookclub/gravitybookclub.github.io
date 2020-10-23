@@ -91,6 +91,7 @@
                 await fetchTwetches(sdk, 0);
             } else {
                 document.getElementById("tPost").setAttribute("disabled", null);
+                dialog = document.getElementById('dlg);
                 dialogPolyfill.registerDialog(dialog);
                 dialog.innerHTML = `<form method="dialog"><p>You need to be logged in to post a book. <a href="/login">Log in ?</a></p></form>`;
                 dialog.showModal();
@@ -354,11 +355,11 @@
                 }
             }
         }, 300);
-        window.addEventListener('DOMContentLoaded', () => {
+        /*window.addEventListener('DOMContentLoaded', () => {
             const parsedUrl = new URL(window.location);
             document.getElementById("post").value = parsedUrl.searchParams.get('text');
             checkPost();
-        });
+        });*/
         window.onclick = function(event) {
             if (event.target == dialog) {
                 dialog.close();
