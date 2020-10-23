@@ -30,7 +30,7 @@
         <h4><a href="/">Gravity Book Club</a></h4>
         <a href="/info"><img class="question nes-pointer" src="assets/resources/question_block_32.png"></a>
     </div>
-    <div id="addDlg" class="nes-dialog poster">
+    <dialog id="addDlg" class="nes-dialog poster">
         <form onsubmit="return false" id="post-container">
             <label for="title" id="titleLabel" style="color:#fff;"></label>
             <textarea type="text" id="title" class="nes-input is-dark" placeholder="[title]"></textarea>
@@ -40,7 +40,7 @@
             <textarea type="text" id="link" class="nes-input is-dark" placeholder="[Bitcoin File Link]"></textarea>
             <input type="submit" id="tPost" value="Add Book" onclick="twetchPost()">
         </form>
-    </div>
+    </dialog>
     <!--<div id="current-book" class="nes-container is-rounded with-title is-dark twetch">
         <p class="profile"><img class="nes-avatar is-rounded is-medium"></p>
         <p><a class="userLink" href="" target="_blank"></a></p>
