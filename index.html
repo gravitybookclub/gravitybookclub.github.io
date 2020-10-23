@@ -259,6 +259,24 @@
             dialog.showModal(); loadingPost = true;
         }
        
+       async function boost() {
+            let penny = await getPenny();
+            boostPublish.open({
+                content: this.getAttribute("name"),
+                tag: '$gbc',
+                diff: {
+                    min: 1,
+                    max: 100,
+                    initial: 1
+                },
+                outputs: [{to: "16bKbvsXc279ZTgvjgTQ29JezjQ3sRVA8N",amount: penny,currency: "BSV"}],
+                onPayment: function(payment, boostJobStatus) {
+                    let boostTxt = `Boosted job queued!<br><br><a href="https://boostpow.com/job/${payment.txid}" target="_blank">Check the status</a>`;
+                    showPopup(boostTxt, 'OK', false);
+                }
+            });
+        }
+       
         function askTip() {
             let uNum = this.getAttribute("name");
             let dialog = document.getElementById('tipDlg');
